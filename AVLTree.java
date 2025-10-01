@@ -365,31 +365,31 @@ class LUC_AVLTree {
             return null;
         }
 
-        // Step 1: Find the node
+        // Find the node
         if (value < node.value) {
             node.leftChild = deleteElement(value, node.leftChild);
         } else if (value > node.value) {
             node.rightChild = deleteElement(value, node.rightChild);
         } else {
-            // Step 2: Node found – handle cases
+            // Node found – handle cases
             if (node.leftChild == null && node.rightChild == null) {
-                return null; // Case 1: leaf
+                return null; // Case 1
             } else if (node.rightChild == null) {
                 return node.leftChild; // Case 2
             } else if (node.leftChild == null) {
                 return node.rightChild; // Case 3
             } else {
-                // Case 4: two children
+                // Case 4
                 Node successor = minValueNode(node.rightChild);
                 node.value = successor.value;
                 node.rightChild = deleteElement(successor.value, node.rightChild);
             }
         }
 
-        // Step 3: Update height
+        // Update height
         node.height = getMaxHeight(getHeight(node.leftChild), getHeight(node.rightChild)) + 1;
 
-        // Step 4: Rebalance if needed
+        // Rebalance if needed
         int bf = getBalanceFactor(node);
 
         if (bf > 1) {
