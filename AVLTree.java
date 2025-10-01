@@ -1,6 +1,6 @@
 
 /*
- * *** YOUR NAME GOES HERE / YOUR SECTION NUMBER ***
+ * *** Luciana Pinel / 002 ***
  *
  * This java file is a Java object implementing simple AVL Tree.
  * You are to complete the deleteElement method.
@@ -361,7 +361,50 @@ class LUC_AVLTree {
          * code for each. You can also look at the method InsertElement, as it has do
          * do many of the same things as this method.
          */
+        if (node == null) {
+            return null;
+        }
 
+        // Step 1: Find the node
+        if (value < node.value) {
+            node.leftChild = deleteElement(value, node.leftChild);
+        } else if (value > node.value) {
+            node.rightChild = deleteElement(value, node.rightChild);
+        } else {
+            // Step 2: Node found – handle cases
+            if (node.leftChild == null && node.rightChild == null) {
+                return null; // Case 1: leaf
+            } else if (node.rightChild == null) {
+                return node.leftChild; // Case 2
+            } else if (node.leftChild == null) {
+                return node.rightChild; // Case 3
+            } else {
+                // Case 4: two children
+                Node successor = minValueNode(node.rightChild);
+                node.value = successor.value;
+                node.rightChild = deleteElement(successor.value, node.rightChild);
+            }
+        }
+
+        // Step 3: Update height
+        node.height = getMaxHeight(getHeight(node.leftChild), getHeight(node.rightChild)) + 1;
+
+        // Step 4: Rebalance if needed
+        int bf = getBalanceFactor(node);
+
+        if (bf > 1) {
+            if (getBalanceFactor(node.leftChild) >= 0) {
+                node = LLRotation(node);
+            } else {
+                node = LRRotation(node);
+            }
+        } else if (bf < -1) {
+            if (getBalanceFactor(node.rightChild) <= 0) {
+                node = RRRotation(node);
+            } else {
+                node = RLRotation(node);
+            }
+        }
         return node;
     }
 
